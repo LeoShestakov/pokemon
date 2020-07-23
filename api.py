@@ -26,3 +26,8 @@ def get_pokemon():
 
 def get_pokemon_url(name):
     return constants.get_pokemon_list()[name]
+
+
+def get_pokemon_data(name):
+    r = requests.get(constants.get_pokemon_list()[name])
+    return r.json()
