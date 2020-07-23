@@ -17,4 +17,9 @@ app.secret_key = b'HO\xf8\xff+\n\x1e\\~/;}'
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    link = 'https://pokeapi.co/api/v2'
+    poke_link = link + "/pokemon?limit=964"
+    response = requests.get(poke_link).json()
+    # need to filter out starting part of json (count, etc)
+    print(response)
+    return render_template('index.html', data = response)
