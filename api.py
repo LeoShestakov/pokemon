@@ -1,5 +1,4 @@
 import requests  # To access our API
-import constants # Holds all data
 from operator import itemgetter  # Manipulates dicts inside lists
 
 # API Links to PokeAPI
@@ -23,11 +22,15 @@ def get_pokemon():
     # Puts Nm
     return dict(zip(names, urls))
 
+pokemon_list = get_pokemon()
+
+def get_pokemon_list():
+    return pokemon_list
 
 def get_pokemon_url(name):
-    return constants.get_pokemon_list()[name]
+    return get_pokemon_list()[name]
 
 
 def get_pokemon_data(name):
-    r = requests.get(constants.get_pokemon_list()[name])
+    r = requests.get(get_pokemon_list()[name])
     return r.json()

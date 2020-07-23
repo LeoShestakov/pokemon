@@ -2,6 +2,7 @@
 {% block title %}Home{% endblock title%}
 
 {% block content %}
+    <h1> Please select <b> 6 </b> Pokemon </h1>
     <form method = "POST" action="{{url_for('index')}}">
     {% for pokemon in data %}
         <input type="checkbox" name={{pokemon}} value={{pokemon}}>
