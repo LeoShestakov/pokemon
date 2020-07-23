@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import session
+from flask import url_for
 import constants
 
 import requests #To access our API
@@ -19,8 +20,7 @@ app.secret_key = b'HO\xf8\xff+\n\x1e\\~/;}'
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        print("GET")
+        return render_template('index.html', data=constants.get_pokemon_list())
     else:
         form = list(request.form)
-        print(form)
-    return render_template('index.html', data=constants.get_pokemon_list())
+        return render_template('results.html', data=form)
