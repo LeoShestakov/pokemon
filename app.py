@@ -16,6 +16,11 @@ app.secret_key = b'HO\xf8\xff+\n\x1e\\~/;}'
 
 # -- Routes section --
 @app.route('/')
-@app.route('/index')
+@app.route('/index', methods=['GET', 'POST'])
 def index():
+    if request.method == 'GET':
+        print("GET")
+    else:
+        form = list(request.form)
+        print(form)
     return render_template('index.html', data=constants.get_pokemon_list())
