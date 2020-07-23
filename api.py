@@ -26,5 +26,3 @@ def get_pokemon():
 
 def get_pokemon_url(name):
     return constants.get_pokemon_list()[name]
-
-print(get_pokemon())
