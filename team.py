@@ -13,3 +13,9 @@ class Team:
 
     def get_pokemon(self):
         return self.pokemon
+
+    def get_picture(self, name):
+        image = self.pokemon[name]['sprites']['front_default']
+        if image is None:
+            return "https://i0.wp.com/www.alphr.com/wp-content/uploads/2016/07/whos_that_pokemon.png?resize=1280%2C960&ssl=1"
+        return image
