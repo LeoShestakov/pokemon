@@ -5,6 +5,7 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
+import team
 import constants
 
 import requests #To access our API
@@ -23,4 +24,6 @@ def index():
         return render_template('index.html', data=constants.get_pokemon_list())
     else:
         form = list(request.form)
-        return render_template('results.html', data=form)
+        my_team = team.Team()
+        my_team.add_pokemon(form)
+        return render_template('results.html', data=my_team)
