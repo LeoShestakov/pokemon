@@ -6,10 +6,29 @@
     <div class = "row">
     {% for pokemon in data.get_names() %}
         <div class = "col-4">
-            <h3> {{pokemon}} </h3>
-            <img src = {{data.get_picture(pokemon)}} width = "150">
+            <h3> {{pokemon.capitalize()}} </h3>
+            <p>
+            {% for index in range(data.get_type(pokemon)|length) %}
+                {% if index + 1 != data.get_type(pokemon)|length %}
+                    {{data.get_type(pokemon)[index]}},
+                {% else %}
+                    {{data.get_type(pokemon)[index]}}
+                {% endif %}
+            {% endfor %}
+
+            <!-- {% for type in data.get_type(pokemon) %}
+                {{type}}, 
+            {% endfor %} -->
+            </p>
+            <img src = {{data.get_picture(pokemon)}} width = "100">
         </div>
     {% endfor %}
     </div>
+<h2> Your Unchecked/Uncountered Weaknesses: </h2>
+<ul>
+{% for type in data.get_unchecked() %}
+    <li> <h4> {{type}} </h4> </li>
+{% endfor %}
+</ul>
 </div>
 {% endblock content%}

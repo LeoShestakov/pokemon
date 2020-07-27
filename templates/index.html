@@ -10,8 +10,8 @@
         <div class = "row">
             {% for pokemon in data %}
                 <div class = "col-3">
-                    <input type="checkbox" name={{pokemon}} value={{pokemon}}>
-                    <label for={{pokemon}}>{{pokemon}}</label><br>
+                    <input type="checkbox" name={{pokemon}} value='pokemon'>
+                    <label for={{pokemon}}>{{pokemon.capitalize()}}</label><br>
                 </div>
             {% endfor %}
             <br>
