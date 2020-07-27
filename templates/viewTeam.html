@@ -1,5 +1,9 @@
 {% extends "base.html"%}
 {% block content%}
+<div class = "container">
+    <button type="button" class = "btn-danger" onclick="window.location.href='{{ url_for('index') }}';">Go Back</button>
+    <br> <br>
+</div>
 <div class="container">
   <div class="row">
     {% for team in data %}
@@ -7,7 +11,12 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">{{team['name']}}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{team['team']}}</h6>
+            <ul>
+                {% for mon in team['team'] %}
+                    <li> <h6 class="card-subtitle mb-2 text-muted">{{mon.capitalize()}}</h6> </li>
+                {% endfor %}
+            </ul>
+          
           <a href={{url_for('teamDetails', id=team['_id']|string)}}>Details</a>
         </div>
       </div>

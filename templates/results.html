@@ -23,7 +23,7 @@
         </div>
     {% endfor %}
     </div>
-<h2> Your Unchecked/Uncountered Weaknesses: </h2>
+<h2 class = 'text-warning'> Your Unchecked/Uncountered Weaknesses: </h2>
 <ul>
 {% for type in data.get_unchecked() %}
     <li> <h4> {{type}} </h4> </li>

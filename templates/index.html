@@ -6,7 +6,8 @@
     <h3> Use <b> CTRL + F </b> to search [SUBMIT AT BOTTOM] </h3>
     <br>
     <div class = "container">
-        <button type="button" class = "btn-success" onclick="window.location.href='{{ url_for('addTeam') }}';">Go Back</button>
+        <button type="button" class = "btn-success" onclick="window.location.href='{{ url_for('viewTeam') }}';">View Team Database</button>
+        <br> <br>
     </div>
     <form method = "POST" action="{{url_for('results')}}">
     <div class = "container">
