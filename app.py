@@ -7,6 +7,7 @@ from flask import session
 from flask import url_for
 from flask import redirect
 from flask_pymongo import PyMongo
+from bson.objectid import ObjectId
 import os
 from dotenv import load_dotenv
 import datetime
@@ -35,17 +36,20 @@ mongo = PyMongo(app)
 
 # -- Routes section --
 @app.route('/')
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/index')
 def index():
+    return render_template('index.html', data=api.get_pokemon_list())
+
+@app.route('/results', methods=['GET', 'POST'])
+def results():
     if request.method == 'GET':
-        return render_template('index.html', data=api.get_pokemon_list())
+        return redirect(url_for('index'))
     else:
         form = list(request.form)
         my_team = team.Team()
         my_team.add_pokemon(form)
         session["team"] = my_team.get_names()
         return render_template('results.html', data=my_team)
-
 
 @app.route('/addTeam', methods=['GET', 'POST'])
 def addTeam():
@@ -60,5 +64,16 @@ def addTeam():
         mongo.db.teams.insert(db_team)
         return redirect(url_for('index'))
 
+@app.route('/viewTeams')
+def viewTeam():
+    data = list(mongo.db.teams.find({}))
+    return render_template('viewTeam.html', data=data)
 
+@app.route('/teamDetails/<id>')
+def teamDetails(id):
+    data = mongo.db.teams.find_one({'_id':ObjectId(id)})
+    my_team = team.Team()
+    my_team.add_pokemon(data['team'])
+    data = my_team
+    return render_template('teamDetails.html', data=my_team)
 
