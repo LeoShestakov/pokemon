@@ -43,9 +43,22 @@ def index():
         form = list(request.form)
         my_team = team.Team()
         my_team.add_pokemon(form)
+        session["team"] = my_team.get_names()
+        return render_template('results.html', data=my_team)
+
+
+@app.route('/addTeam', methods=['GET', 'POST'])
+def addTeam():
+    if request.method == 'GET':
+        return redirect(url_for('index'))
+    else:
+        form = dict(request.form)
         db_team = {
-            "team": my_team.get_names()
+            "name": form['name'],
+            "team": session["team"]
         }
         mongo.db.teams.insert(db_team)
-        return render_template('results.html', data=my_team)
+        return redirect(url_for('index'))
+
+
 

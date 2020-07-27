@@ -27,8 +27,8 @@
 {% endfor %}
 </ul>
 <form method = "POST" action="{{url_for('addTeam')}}">
+    <input type = "text" name ="name" />
     <label for="name"><u> <h5> Enter Team Name: </h5> </u></label><br>
-    <input type = "text" id = "name" />
     <input type="submit" value="Submit to Database">
 </div>
 {% endblock content%}
