@@ -28,6 +28,9 @@
 {% for type in data.get_unchecked() %}
     <li> <h4> {{type}} </h4> </li>
 {% endfor %}
+{% if data.get_unchecked() == [] %}
+    <h5 class="text-success"> **ALL WEAKNESSES COMBATED** </h5>
+{% endif %}
 </ul>
 <form method = "POST" action="{{url_for('addTeam')}}">
     <label for="name"><u> <h5> Enter Team Name: </h5> </u></label><br>
