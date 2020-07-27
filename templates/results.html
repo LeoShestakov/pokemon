@@ -15,10 +15,6 @@
                     {{data.get_type(pokemon)[index]}}
                 {% endif %}
             {% endfor %}
-
-            <!-- {% for type in data.get_type(pokemon) %}
-                {{type}}, 
-            {% endfor %} -->
             </p>
             <img src = {{data.get_picture(pokemon)}} width = "100">
         </div>
@@ -30,5 +26,9 @@
     <li> <h4> {{type}} </h4> </li>
 {% endfor %}
 </ul>
+<form method = "POST" action="{{url_for('addTeam')}}">
+    <label for="name"><u> <h5> Enter Team Name: </h5> </u></label><br>
+    <input type = "text" id = "name" />
+    <input type="submit" value="Submit to Database">
 </div>
 {% endblock content%}
