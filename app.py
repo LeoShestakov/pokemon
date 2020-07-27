@@ -67,6 +67,7 @@ def addTeam():
 @app.route('/viewTeams')
 def viewTeam():
     data = list(mongo.db.teams.find({}))
+    print(data)
     return render_template('viewTeam.html', data=data)
 
 @app.route('/teamDetails/<id>')
