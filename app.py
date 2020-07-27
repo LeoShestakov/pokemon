@@ -67,7 +67,6 @@ def addTeam():
 @app.route('/viewTeams')
 def viewTeam():
     data = list(mongo.db.teams.find({}))
-    print(data)
     return render_template('viewTeam.html', data=data)
 
 @app.route('/teamDetails/<id>')
@@ -78,3 +77,8 @@ def teamDetails(id):
     data = my_team
     return render_template('teamDetails.html', data=my_team)
 
+@app.route('/teamSelect')
+def teamSelect():
+    data = list(mongo.db.teams.find({}))
+    print(data)
+    return render_template('teamSelect.html', data=data)
