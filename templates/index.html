@@ -3,8 +3,13 @@
 
 {% block content %}
     <h1> <u> Select <b> 6 </b> Pokemon </u> </h1>
-    <h3> Use <b> CTRL + F </b> to search </h3>
+    <h3> Use <b> CTRL + F </b> to search [SUBMIT AT BOTTOM] </h3>
     <br>
+    <div class = "container">
+        <form action="https://google.com">
+            <button type="submit" class="btn btn-primary">Go To Battle</button>
+        </form>
+    </div>
     <form method = "POST" action="{{url_for('index')}}">
     <div class = "container">
         <div class = "row">
