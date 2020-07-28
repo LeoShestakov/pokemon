@@ -14,7 +14,7 @@
             <div class="col-4">
             <select name = {{"team" + (i + 1)|string}}>
             {% for team in data %}
-                <option value = {{"value" + (i + 1)|string}}>{{team['name']}}</option>
+                <option value = {{team['name']}}>{{team['name']}}</option>
             {% endfor %}
             </select>
             </div>

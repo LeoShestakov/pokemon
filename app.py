@@ -82,3 +82,12 @@ def teamSelect():
     data = list(mongo.db.teams.find({}))
     print(data)
     return render_template('teamSelect.html', data=data)
+
+@app.route('/battle',methods=['GET', 'POST'])
+def battle():
+    if request.method == 'GET':
+        return redirect('teamSelect')
+    else:
+        data = dict(request.form)
+        print(data)
+        return render_template('index.html')
