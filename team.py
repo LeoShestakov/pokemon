@@ -1,12 +1,6 @@
 import api
 import numpy as np
-from enum import Enum
-
-
-class Sprite(Enum):
-    BACK = 0
-    FRONT = 1
-
+import pokemon
 
 ### A Pokemon Types Table Plot In Python
 ### Seaborn Approach:
@@ -43,11 +37,13 @@ class Team:
     def __init__(self):
         self.pokemon = {}
         self.poke_names = []
+        self.battle_team = []
 
     def add_pokemon(self, names):
         for name in names:
             self.poke_names.append(name)
             self.pokemon.update({name: api.get_pokemon_data(name)})
+            self.battle_team.append(pokemon.Pokemon(name))
 
     def get_names(self):
         return self.poke_names
@@ -103,17 +99,6 @@ class Team:
             return "https://i0.wp.com/www.alphr.com/wp-content/uploads/2016/07/whos_that_pokemon.png?resize=1280%2C960&ssl=1"
         return image
 
-    def battle_image(self, name, Sprite):
-        image = ""
-        if Sprite == Sprite.FRONT:
-            image = self.pokemon[name]['sprites']['front_default']
-        else:
-            image = self.pokemon[name]['sprites']['back_default']
-
-        if image is None:
-            return "https://vignette.wikia.nocookie.net/super-arc-bros-brawl/images/6/62/MissingNo.png"
-        return image
-
     def battle_stat(self, name):
         base_stats = self.pokemon[name]['stats']
         keys = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"]
@@ -126,4 +111,7 @@ class Team:
                 val += 5
             stats_list.append(val)
         return dict(zip(keys, stats_list))
+
+        def get_team(self):
+            return self.battle_team
 

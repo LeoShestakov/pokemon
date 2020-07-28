@@ -11,7 +11,7 @@ class Battle:
             self.get_input(self.player1)
             # player1 makes move
             # if player2 is not dead
-                self.get_input(self.player2)
+            self.get_input(self.player2)
 
     def get_input(self, player):
         print("Options: ATK or SWAP")
