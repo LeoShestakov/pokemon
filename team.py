@@ -1,5 +1,12 @@
 import api
 import numpy as np
+from enum import Enum
+
+
+class Sprite(Enum):
+    BACK = 0
+    FRONT = 1
+
 
 ### A Pokemon Types Table Plot In Python
 ### Seaborn Approach:
@@ -95,3 +102,23 @@ class Team:
         if image is None:
             return "https://i0.wp.com/www.alphr.com/wp-content/uploads/2016/07/whos_that_pokemon.png?resize=1280%2C960&ssl=1"
         return image
+
+    def battle_image(self, name, Sprite):
+        image = ""
+        if Sprite == Sprite.FRONT:
+            image = self.pokemon[name]['sprites']['front_default']
+        else:
+            image = self.pokemon[name]['sprites']['back_default']
+
+        if image is None:
+            return "https://vignette.wikia.nocookie.net/super-arc-bros-brawl/images/6/62/MissingNo.png"
+        return image
+
+    def battle_stat(self, name):
+        base_stats = self.pokemon[name]['stats']
+        keys = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"]
+        stats_list = []
+        for stats in base_stats:
+            stats_list.append(stats['base_stat'])
+        return dict(zip(keys, stats_list))
+        
