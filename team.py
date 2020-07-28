@@ -119,6 +119,11 @@ class Team:
         keys = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"]
         stats_list = []
         for stats in base_stats:
-            stats_list.append(stats['base_stat'])
+            val = (2 * stats['base_stat'] + 31)
+            if stats['stat']['name'] == 'hp':
+                val += 110
+            else:
+                val += 5
+            stats_list.append(val)
         return dict(zip(keys, stats_list))
-        
+
