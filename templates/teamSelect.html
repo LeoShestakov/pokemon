@@ -2,12 +2,25 @@
 
 {% block content %}
 <div class="container">
-    {% for i in range(2) %}
-    <div class="col-6">
-        {% for team in data %}
-            {{team['name']}}
+    <br>
+    <div class = "row">
+        <form method = "POST" action="{{url_for('battle')}}">
+        {% for i in range(2) %}
+            {% if i == 1 %}
+                <div class = "col-4">
+                    <h3> V.S. </h3>
+                </div>
+            {% endif %}
+            <div class="col-4">
+            <select name = {{"team" + (i + 1)|string}}>
+            {% for team in data %}
+                <option value = {{"value" + (i + 1)|string}}>{{team['name']}}</option>
+            {% endfor %}
+            </select>
+            </div>
         {% endfor %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
-    {% endfor %}
 </div>
 {% endblock content %}
