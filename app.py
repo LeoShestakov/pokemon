@@ -97,5 +97,5 @@ def game():
         team2 = team.Team()
         team1.add_pokemon(t1)
         team2.add_pokemon(t2)
-        teams = {'team1': team1.get_team(), 'team2': team2.get_team()}
+        teams = {'team1': team1.get_team(), 'team2': team2.get_team(), 'typing': team1.get_array()}
         return render_template('game.html', data=teams)

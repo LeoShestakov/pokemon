@@ -1,5 +1,4 @@
 import api
-import numpy as np
 import pokemon
 
 ### A Pokemon Types Table Plot In Python
@@ -13,9 +12,9 @@ pokemon_types = {"Normal" : 0, "Fire" : 1, "Water" : 2, "Electric" : 3, "Grass" 
                  "Fighting" : 6, "Poison" : 7, "Ground" : 8, "Flying" : 9, "Psychic" : 10,
                  "Bug" : 11, "Rock" : 12, "Ghost" : 13, "Dragon" : 14, "Dark" : 15, "Steel" : 16, "Fairy" : 17}
 
-# A 2 Dimenstional Numpy Array Of Damage Multipliers For Attacking Pokemon:
+# A 2 Dimenstional Array Of Damage Multipliers For Attacking Pokemon:
 
-damage_array = np.array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1/2, 0, 1, 1, 1/2, 1],
+damage_array = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1/2, 0, 1, 1, 1/2, 1],
                     [1, 1/2, 1/2, 1, 2, 2, 1, 1, 1, 1, 1, 2, 1/2, 1, 1/2, 1, 2, 1],
                     [1, 2, 1/2, 1, 1/2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1/2, 1, 1, 1],
                     [1, 1, 2, 1/2, 1/2, 1, 1, 1, 0, 2, 1, 1, 1, 1, 1/2, 1, 1, 1],
@@ -32,7 +31,7 @@ damage_array = np.array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1/2, 0, 1, 1, 1/2,
                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1/2, 0],
                     [1, 1, 1, 1, 1, 1, 1/2, 1, 1, 1, 2, 1, 1, 2, 1, 1/2, 1, 1/2],
                     [1, 1/2, 1/2, 1/2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1/2, 2],
-                    [1, 1/2, 1, 1, 1, 1, 2, 1/2, 1, 1, 1, 1, 1, 1, 2, 2, 1/2, 1]])
+                    [1, 1/2, 1, 1, 1, 1, 2, 1/2, 1, 1, 1, 1, 1, 1, 2, 2, 1/2, 1]]
 
 
 class Team:
@@ -133,3 +132,5 @@ class Team:
             team_list.append(pokemon.getInfo())
         return team_list
 
+    def get_array(self):
+        return [damage_array, pokemon_types]

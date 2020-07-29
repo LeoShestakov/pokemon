@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
 canvas {
@@ -9,7 +10,8 @@ canvas {
 }
 </style>
 </head>
-<body onload="startGame()">
+<body style = "background-color: #e84b43" onload="startGame()">
+<canvas id = "canvas" width = "500" height = "350" style = "position: relative"> </canvas>
 <script>
 
 var gameConsole;
@@ -33,13 +35,12 @@ function startGame() {
 }
 
 var myGameArea = {
-    canvas : document.createElement("canvas"),
+    canvas : document.getElementById("canvas"),
     start : function() {
-        this.canvas.width = 500;
-        this.canvas.height = 350;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 20);
+        //this.canvas.setAttribute('class', 'd-flex justify-content-right');
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -52,6 +53,7 @@ function pokemon(data) {
     this.health = this.stats['hp'];
     this.alive = this.health > 0;
     this.images = data['sprites'];
+    this.type = data['type'];
     this.damage = function(damage){
         if(damage < this.health) {
             this.health -= damage;
@@ -247,7 +249,9 @@ function sleep(ms) {
 function attack(attacker, target) {
     var damage = 42 * (attacker.stats['attack'] / target.stats['defense']);
     damage = damage * (Math.floor(Math.random(0,9) * 10 + 30));
-    damage = Math.floor((damage / 50) + 2);
+    damage = (damage / 50) + 2;
+    damage = damage * get_multiplier(attacker, target);
+    damage = Math.floor(damage);
     console.log("Damage: " + damage);
     target.damage(damage);
     console.log("Target: " + target.health);
@@ -259,7 +263,9 @@ function attack(attacker, target) {
 function sp_attack(attacker, target) {
     var damage = 42 * (attacker.stats['special-attack'] / target.stats['special-defense']);
     damage = damage * (Math.floor(Math.random(0,9) * 10 + 30));
-    damage = Math.floor((damage / 50) + 2);
+    damage = (damage / 50) + 2;
+    damage = damage * get_multiplier(attacker, target);
+    damage = Math.floor(damage);
     console.log("Damage: " + damage);
     target.damage(damage);
     console.log("Target: " + target.health);
@@ -405,17 +411,36 @@ function updateGameArea() {
     gameLogic();
 }
 
+function get_multiplier(attacker, target) {
+    index_mapping = data['typing'][1];
+    multiplier_array = data['typing'][0];
+    multiplier = 1;
+    atk_types = attacker.type;
+    def_types = target.type;
+    atk_types = atk_types[Math.floor(Math.random(0,atk_types.length))];
+    for (i = 0; i < def_types.length; i++) {
+        dtype = def_types[i];
+        atk_index = index_mapping[atk_types];
+        def_index = index_mapping[dtype];
+        multiplier = multiplier * multiplier_array[atk_index][def_index];
+    }
+    console.log("ATK MULTIPLIER: " + multiplier);
+    return multiplier;
+}
+
 </script>
-<div class = "card" style = "width: 500px; height: 150px; background-color: black; margin-top: -2em;">
-    <br> <br>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<div class = "card" style = "width: 500px; height: 150px; background-color: black; margin-top: 0em;">
     <div class="card-body">
-        <h3 style = "color: white" id = "console"> </h3>
+        <h5 style = "color: white" id = "console"> </h5>
     </div>
 </div>
 <br>
 <button id="attack1" onclick="teamReady(1, 'attack')">Attack1</button>
-<button id="attack2" onclick="teamReady(2, 'attack')">Attack2</button>
 <button id="sp-attack1" onclick="teamReady(1, 'sp-attack')">SP-Attack1</button>
+<button id="attack2" onclick="teamReady(2, 'attack')">Attack2</button>
 <button id="sp-attack2" onclick="teamReady(2, 'sp-attack')">SP-Attack2</button>
 <button id="team1-pokemon0"></button>
 <button id="team1-pokemon1"></button>
