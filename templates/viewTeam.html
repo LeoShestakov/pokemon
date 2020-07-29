@@ -1,9 +1,7 @@
 {% extends "base.html"%}
 {% block content%}
-<div class = "container">
-    <button type="button" class = "btn-danger" onclick="window.location.href='{{ url_for('index') }}';">Go Back</button>
-    <br> <br>
-</div>
+<div style = "background-color: #e84b43">
+<br>
 <div class="container">
   <div class="row">
     {% for team in data %}
@@ -16,7 +14,6 @@
                     <li> <h6 class="card-subtitle mb-2 text-muted">{{mon.capitalize()}}</h6> </li>
                 {% endfor %}
             </ul>
-          
           <a href={{url_for('teamDetails', id=team['_id']|string)}}>Details</a>
         </div>
       </div>
@@ -24,8 +21,9 @@
     {% endfor %}
   </div>
 </div>
+<br>
 <div class = "container">
-    <br>
     <button type="button" class = "btn-primary" onclick="window.location.href='{{ url_for('teamSelect') }}';">Team Selector</button>
+</div>
 </div>
 {% endblock %}
