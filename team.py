@@ -33,6 +33,8 @@ damage_array = np.array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1/2, 0, 1, 1, 1/2,
                     [1, 1, 1, 1, 1, 1, 1/2, 1, 1, 1, 2, 1, 1, 2, 1, 1/2, 1, 1/2],
                     [1, 1/2, 1/2, 1/2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1/2, 2],
                     [1, 1/2, 1, 1, 1, 1, 2, 1/2, 1, 1, 1, 1, 1, 1, 2, 2, 1/2, 1]])
+
+
 class Team:
     def __init__(self):
         self.pokemon = {}
@@ -50,6 +52,7 @@ class Team:
 
     def remove_pokemon(self, name):
         self.pokemon.pop(name)
+        self.poke_names.remove(name)
 
     def get_pokemon(self):
         return self.pokemon
@@ -112,6 +115,21 @@ class Team:
             stats_list.append(val)
         return dict(zip(keys, stats_list))
 
-        def get_team(self):
-            return self.battle_team
+    def get_poke_moves(self, name):
+        move_list = {}
+        for move in self.pokemon[name]['moves']:
+            move_list.update({move['move']['name']: move['move']['url']})
+        return move_list
+
+    def get_moves(self):
+        move_list = {}
+        for poke in self.poke_names:
+            move_list.update({poke: self.get_poke_moves(poke)})
+        return move_list
+
+    def get_team(self):
+        team_list = []
+        for pokemon in self.battle_team:
+            team_list.append(pokemon.getInfo())
+        return team_list
 

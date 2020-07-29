@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock title%}
+
+{% block content %}
+<div style="background-color:#e84a44">
+    <div class="container d-flex justify-content-center" style="background-image:url('static/images/rotom-background.png'); background-repeat:no-repeat; background-size: 100%;">
+        <ul class="overflow-auto" style="height:50vh; margin-top:40vh; margin-left:30vw">
+            {% for pokemon in data %}
+                <li class="list-group-item" style="background-color:rgba(255, 255, 255, 0); border:#FFFFFF">
+                    <input type="checkbox" name={{pokemon}} 
+                    onclick="if(document.querySelectorAll('input:checked').length > 6) {
+                            this.checked = false;
+                            alert('You Can Only Pick 6 Pokemon Max! Don\'t Be Greedy!');
+                        }">
+                    <label for="{{pokemon}}">{{pokemon.capitalize()}}</label>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock content%}

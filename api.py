@@ -4,7 +4,9 @@ from operator import itemgetter  # Manipulates dicts inside lists
 # API Links to PokeAPI
 MAIN_URL = 'https://pokeapi.co/api/v2/'
 API_URL = {
-    'pokemon': MAIN_URL + 'pokemon/'
+    'pokemon': MAIN_URL + 'pokemon/',
+    'held-items': MAIN_URL + 'item-category/held-items',
+    'nature': MAIN_URL + 'nature'
 }
 
 
@@ -34,3 +36,11 @@ def get_pokemon_url(name):
 def get_pokemon_data(name):
     r = requests.get(get_pokemon_list()[name])
     return r.json()
+
+def get_held_items():
+    r = requests.get(API_URL['held-items'])
+    r = r.json()['items']
+    items = {}
+    for item in r:
+        items.update({item['name']: item['url']})
+    return items

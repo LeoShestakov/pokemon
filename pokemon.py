@@ -30,19 +30,34 @@ class Pokemon:
             stats_list.append(val)
         return dict(zip(keys, stats_list))
 
-    def battle_image(self, name, sprite):
+    def battle_image(self, sprite):
         image = ""
         if sprite == Sprite.FRONT:
-            image = self.pokemon[name]['sprites']['front_default']
+            image = self.json['sprites']['front_default']
         else:
-            image = self.pokemon[name]['sprites']['back_default']
+            image = self.json['sprites']['back_default']
 
         if image is None:
             return "https://vignette.wikia.nocookie.net/super-arc-bros-brawl/images/6/62/MissingNo.png"
         return image
 
     def getInfo(self):
-        return self.json
+        info = {}
+        info.update({'name': self.name})
+        info.update({'stats': self.stats})
+        info.update({'type': self.getType()})
+        info.update({'sprites': {
+                                'front': self.battle_image(Sprite.FRONT),
+                                'back': self.battle_image(Sprite.BACK)
+                                }})
+        return info
+
+    def getType(self):
+        data = self.json['types']
+        ans = []
+        for poke_type in data:
+            ans.append(poke_type['type']['name'].capitalize())
+        return ans
 
     def damage(self, damage):
         if damage < self.health:
@@ -51,11 +66,11 @@ class Pokemon:
             self.health = 0
             self.alive = False
 
-    def inPlay(self):
-        self.inPlay = True
-
-    def outOfPlay(self):
-        self.outOfPlay = False
+    def swapPlay(self):
+        self.inPlay = not self.inPlay
 
     def getStats(self):
         return self.stats
+
+    def isAlive(self):
+        return self.alive

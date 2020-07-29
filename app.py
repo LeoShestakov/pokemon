@@ -38,7 +38,7 @@ mongo = PyMongo(app)
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', data=api.get_pokemon_list())
+    return render_template('index2.html', data=api.get_pokemon_list())
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
@@ -77,6 +77,7 @@ def teamDetails(id):
     data = my_team
     return render_template('teamDetails.html', data=my_team)
 
+# Experimental Routes
 @app.route('/teamSelect')
 def teamSelect():
     data = list(mongo.db.teams.find({}))
@@ -91,3 +92,12 @@ def battle():
         data = dict(request.form)
         print(data)
         return render_template('index.html')
+
+@app.route('/game')
+def game():
+    team1 = team.Team()
+    team2 = team.Team()
+    team1.add_pokemon(["bulbasaur","ivysaur", "venusaur", "charmander", "charmeleon", "charizard"])
+    team2.add_pokemon(["squirtle", "wartortle", "blastoise", "caterpie", "metapod", "butterfree"])
+    teams = {'team1': team1.get_team(), 'team2': team2.get_team()}
+    return render_template('game.html', data=teams)
