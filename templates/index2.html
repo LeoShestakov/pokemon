@@ -17,6 +17,9 @@
     </div>
     <div class="container d-flex justify-content-center" style="background-image:url('static/images/rotom-background.png'); background-repeat:no-repeat; background-size: 100%;">
         <div class="overflow-auto row" style="height:50vh; margin-top:40vh; margin-left:10vw margin-right:10vw">
+            <div class = "col-12 d-flex justify-content-center">
+                <h5> --- Select 6 Pokémon --- </h5>
+            </div>
             {% for pokemon in data %}
                 <div class = "col-3">
                     <input type="checkbox" name={{pokemon}} 

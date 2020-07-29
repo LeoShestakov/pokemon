@@ -61,7 +61,8 @@ def addTeam():
             "name": form['name'],
             "team": session["team"]
         }
-        mongo.db.teams.insert(db_team)
+        if db_team["name"] != "":
+            mongo.db.teams.insert(db_team)
         return redirect(url_for('index'))
 
 @app.route('/viewTeams')
