@@ -328,19 +328,18 @@ function component(width, height, color, x, y) {
     };
 }
 
-function printText(message) {
+function printText(message, y) {
     ctx = myGameArea.context;
     ctx.font = "15px Monospace";
     ctx.fillStyle = "white";
-    ctx.fillText(message, 10, 400); 
+    ctx.fillText(message, 10, y); 
 }
 
 async function log_showcase() {
+    var y = 400;
     for(i = 0; i < turn_log.length; i++) {
-        myGameArea.clear();
-        background();
-        gameConsole.update();
-        printText(turn_log[i]);
+        printText(turn_log[i], y);
+        y = y + 30;
         await sleep(3000);
     }
     turn_log = [];
