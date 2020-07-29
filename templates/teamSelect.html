@@ -1,16 +1,18 @@
 {% extends "base.html"%}
 
 {% block content %}
+<div style = "background-color: #e84b43">
 <div class="container">
     <br>
     <div class = "row">
-        <form method = "POST" action="{{url_for('battle')}}">
+        <form method = "POST" action="{{url_for('game')}}">
         {% for i in range(2) %}
             {% if i == 1 %}
-                <div class = "col-4">
-                    <h3> V.S. </h3>
-                </div>
+            <br>
+                <h5 class = "text-light"> V.S. </h5>
+            <br>
             {% endif %}
+            <h3 class = "text-light"> Team {{(i + 1)|string}}: </h3>
             <div class="col-4">
             <select name = {{"team" + (i + 1)|string}}>
             {% for team in data %}
@@ -26,5 +28,6 @@
         </div>
         </form>
     </div>
+</div>
 </div>
 {% endblock content %}

@@ -85,20 +85,17 @@ def teamSelect():
     print(data)
     return render_template('teamSelect.html', data=data)
 
-@app.route('/battle',methods=['GET', 'POST'])
-def battle():
+@app.route('/game',methods=['GET', 'POST'])
+def game():
     if request.method == 'GET':
         return redirect('teamSelect')
     else:
         data = dict(request.form)
-        print(data)
-        return render_template('index.html')
-
-@app.route('/game')
-def game():
-    team1 = team.Team()
-    team2 = team.Team()
-    team1.add_pokemon(["bulbasaur","ivysaur", "venusaur", "charmander", "charmeleon", "charizard"])
-    team2.add_pokemon(["squirtle", "wartortle", "blastoise", "caterpie", "metapod", "butterfree"])
-    teams = {'team1': team1.get_team(), 'team2': team2.get_team()}
-    return render_template('game.html', data=teams)
+        t1 = mongo.db.teams.find_one({'_id': ObjectId(data['team1'])})['team']
+        t2 = mongo.db.teams.find_one({'_id': ObjectId(data['team2'])})['team']
+        team1 = team.Team()
+        team2 = team.Team()
+        team1.add_pokemon(t1)
+        team2.add_pokemon(t2)
+        teams = {'team1': team1.get_team(), 'team2': team2.get_team()}
+        return render_template('game.html', data=teams)
