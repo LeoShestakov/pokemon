@@ -18,6 +18,7 @@ var team2;
 var data = {{data | tojson }}
 var active;
 var winner;
+var turn_log;
 function startGame() {
     myGameArea.start();
     gameConsole = new component(500, 150, "black", 0, 350);
@@ -28,6 +29,7 @@ function startGame() {
     active = team1.team.length > 0 && team2.team.length > 0;
     winner = "";
     swapControlInit();
+    turn_log = [];
 }
 
 var myGameArea = {
@@ -108,6 +110,7 @@ function teamAlive(team) {
     }
     return false;
 }
+
 function teamReady(teamNumber) {
     var element = document.getElementById("attack" + teamNumber);
     element.style.display = "none";
@@ -222,12 +225,17 @@ function battle(team1, team2) {
     }
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function attack(attacker, target) {
     var damage = 42 * (attacker.stats['attack'] / target.stats['defense']) * 80;
-    damage = (damage / 50) + 2;
+    damage = Math.floor((damage / 50) + 2);
     console.log("Damage: " + damage);
     target.damage(damage);
     console.log("Target: " + target.health);
+    turn_log.push(attacker.name + " just attacked " + target.name + " dealing " + damage + " damage!");
     console.log(attacker.name + " just attacked " + target.name + "!");
 }
 
@@ -327,6 +335,17 @@ function printText(message) {
     ctx.fillText(message, 10, 400); 
 }
 
+async function log_showcase() {
+    for(i = 0; i < turn_log.length; i++) {
+        myGameArea.clear();
+        background();
+        gameConsole.update();
+        printText(turn_log[i]);
+        await sleep(3000);
+    }
+    turn_log = [];
+}
+
 function background() {
     image = new Image();
     image.src = "static/images/battle-background.jpg"
@@ -338,6 +357,7 @@ function updateGameArea() {
     myGameArea.clear();
     background();
     gameConsole.update();
+    log_showcase();
     gameLogic();
 }
 
