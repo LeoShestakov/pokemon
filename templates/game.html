@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    border:1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
+</style>
+</head>
+<body onload="startGame()">
+<script>
+
+var gameConsole;
+var team1;
+var team2;
+var data = {{data | tojson }}
+var active;
+var winner;
+function startGame() {
+    myGameArea.start();
+    gameConsole = new component(500, 150, "black", 0, 350);
+    team1 = new team(1);
+    team2 = new team(2);
+    team1.addTeam(data['team1']);
+    team2.addTeam(data['team2']);
+    active = team1.team.length > 0 && team2.team.length > 0;
+    winner = "";
+    swapControlInit();
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 500;
+        this.canvas.height = 500;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.interval = setInterval(updateGameArea, 20);
+    },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+function pokemon(data) {
+    this.name = data['name'];
+    this.stats = data['stats'];
+    this.health = this.stats['hp'];
+    this.alive = this.health > 0;
+    this.damage = function(damage){
+        if(damage < this.health) {
+            this.health -= damage;
+        }
+        else {
+            this.health = 0;
+            this.alive = false;
+        }
+    };
+    this.isAlive = function(){
+        return this.alive;
+    };
+}
+
+function team(id) {
+    this.team = [];
+    this.indexPlay = 0;
+    this.move = "";
+    this.id = id;
+    this.forceSwap = false;
+    this.addTeam = function(data){
+        for(i = 0; i < data.length; i++) {
+            var poke = new pokemon(data[i]);
+            this.team.push(poke);
+            console.log(this.team);
+        }
+    };
+    this.resetMove = function() {
+        this.move = "";
+    };
+    this.teamAlive = function() {
+        for(i = 0; i < this.team.length; i++) {
+            if(this.team[i].alive) {
+                return true;
+            }
+        }
+        return false;
+    };
+    this.endPlay = function() {
+        var elem = document.getElementById('team' + this.id + '-pokemon' + this.indexPlay);
+        elem.disabled = true;
+    }
+    this.setIndex = function(num) {
+        this.indexPlay = num;
+        console.log(this.indexPlay);
+    };
+    this.swap = function() {
+        this.forceSwap = !this.forceSwap;
+    }
+}
+
+function teamAlive(team) {
+    for(i = 0; i < team.team.length; i++) {
+        if(team.team[i].alive) {
+            return true;
+        }
+    }
+    return false;
+}
+function teamReady(teamNumber) {
+    var element = document.getElementById("attack" + teamNumber);
+    element.style.display = "none";
+    if(teamNumber == 1) {
+        team1.move = 'attack';
+    }
+    else {
+        team2.move = 'attack';
+    }
+}
+
+function resetControls(num) {
+    var elem
+    if(num == 1) {
+        elem = document.getElementById("attack1");
+        team1.resetMove();
+    }
+    else {
+        elem = document.getElementById("attack2");
+        team2.resetMove();
+    }
+    elem.style.display = "block";
+}
+
+function resetBattle() {
+    if(!team1.forceSwap) {
+        resetControls(1);
+    }
+    else {
+        showForcedSwap(1);
+    }
+    if(!team2.forceSwap) {
+        resetControls(2);
+    }
+    else {
+        showForcedSwap(2);
+    }
+}
+
+function endGame(winner) {
+    active = false;
+    printText(winner + " is Victorious!!!!");
+}
+
+function gameLogic() {
+    console.log("Game Logic Run");
+    if(active) {
+        battle(team1, team2);
+    }
+    else {
+        endGame(winner);
+    }
+}
+
+function executeMove(team1, team2) {
+    if (team1.move.localeCompare('attack') == 0) {
+        console.log("Does Attack!");
+        attack(team1.team[team1.indexPlay], team2.team[team2.indexPlay]);
+    }
+}
+
+function battle(team1, team2) {
+    if(team1.move.length > 0 && team2.move.length > 0) {
+        console.log("Moves Selected!");
+        if(active) {
+            console.log("Into Battle!");
+            var attacker1;
+            var attacker2;
+            if(isFirst(team1.team[team1.indexPlay], team2.team[team2.indexPlay])) {
+                attacker1 = team1;
+                attacker2 = team2;
+            }
+            else {
+                attacker1 = team2;
+                attacker2 = team1;
+            }
+            console.log("Attacker Selected!");
+            executeMove(attacker1, attacker2);
+            console.log("Move Executed");
+            if(attacker2.team[attacker2.indexPlay].isAlive()) {
+                console.log("Move 2 Executed");
+                executeMove(attacker2, attacker1);
+                if(!attacker1.team[attacker1.indexPlay].isAlive()) {
+                    if(teamAlive(attacker1)) {
+                        swapForced(attacker1);
+                        console.log("Waiting for Swap!");
+                        resetBattle();
+                        return;
+                    }
+                    else {
+                        winner = "Player" + attacker2.id;
+                        endGame(winner);
+                    }
+                }
+            }
+            else {
+                if(teamAlive(attacker2)) {
+                    swapForced(attacker2);
+                    console.log("Waiting for Swap!");
+                    resetBattle();
+                    return;
+                }
+                else {
+                    winner = "Player" + attacker1.id;
+                    endGame(winner);
+                }
+            }
+            if(active) {
+                resetBattle();
+            }
+        }
+    }
+}
+
+function attack(attacker, target) {
+    var damage = 42 * (attacker.stats['attack'] / target.stats['defense']) * 80;
+    damage = (damage / 50) + 2;
+    console.log("Damage: " + damage);
+    target.damage(damage);
+    console.log("Target: " + target.health);
+    console.log(attacker.name + " just attacked " + target.name + "!");
+}
+
+function swapControlInit() {
+    for(i = 0; i < team1.team.length; i++) {
+        var elem = document.getElementById('team1-pokemon' + i);
+        elem.innerHTML = team1.team[i].name;
+        elem.setAttribute("onclick", "swapForcedSelected(1, " + i + ")");
+        elem.style.display = "none";
+    }
+    for(i = 0; i < team2.team.length; i++) {
+        var elem = document.getElementById('team2-pokemon' + i);
+        elem.innerHTML = team2.team[i].name;
+        elem.setAttribute("onclick", "swapForcedSelected(2, " + i + ")");
+        elem.style.display = "none";
+    }
+}
+
+function swapForced(team) {
+    if(team.id == 1) {
+        team1.swap();
+        team1.endPlay();
+        team1.resetMove();
+    }
+    else {
+        team2.swap();
+        team2.endPlay();
+        team2.resetMove();
+    }
+}
+
+function showForcedSwap(teamNum) {
+    var team;
+    if(teamNum == 1) {
+        team = team1;
+    }
+    else {
+        team = team2;
+    }
+    for(i = 0; i < team1.team.length; i++) {
+        var elem = document.getElementById('team' + teamNum + '-pokemon' + i);
+        elem.style.display = "block";
+    }
+}
+
+function hideForcedSwap(teamNum) {
+    var team;
+    if(teamNum == 1) {
+        team = team1;
+    }
+    else {
+        team = team2;
+    }
+    for(i = 0; i < team1.team.length; i++) {
+        var elem = document.getElementById('team' + teamNum + '-pokemon' + i);
+        elem.style.display = "none";
+    }
+}
+
+function swapForcedSelected(team, num) {
+    var teamObj;
+    if(team == 1) {
+        teamObj = team1;
+    }
+    else {
+        teamObj = team2;
+    }
+    teamObj.swap();
+    teamObj.setIndex(num);
+    hideForcedSwap(team);
+    resetControls(team);
+}
+
+function isFirst(pokemon1, pokemon2) {
+    return pokemon1.stats['speed'] >= pokemon2.stats['speed'];
+}
+
+function component(width, height, color, x, y) {
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+    ctx = myGameArea.context;
+    ctx.fillStyle = color;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+    this.update = function(){
+        ctx = myGameArea.context;
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    };
+}
+
+function printText(message) {
+    ctx = myGameArea.context;
+    ctx.font = "15px Monospace";
+    ctx.fillStyle = "white";
+    ctx.fillText(message, 10, 400); 
+}
+
+function background() {
+    image = new Image();
+    image.src = "static/images/battle-background.jpg"
+    ctx = myGameArea.context;
+    ctx.drawImage(image, 0, 0, 500, 400)
+}
+
+function updateGameArea() {
+    myGameArea.clear();
+    background();
+    gameConsole.update();
+    gameLogic();
+}
+
+</script>
+
+<button id="attack1" onclick="teamReady(1)">Attack1</button>
+<button id="attack2" onclick="teamReady(2)">Attack2</button>
+<button id="team1-pokemon0"></button>
+<button id="team1-pokemon1"></button>
+<button id="team1-pokemon2"></button>
+<button id="team1-pokemon3"></button>
+<button id="team1-pokemon4"></button>
+<button id="team1-pokemon5"></button>
+<button id="team2-pokemon0"></button>
+<button id="team2-pokemon1"></button>
+<button id="team2-pokemon2"></button>
+<button id="team2-pokemon3"></button>
+<button id="team2-pokemon4"></button>
+<button id="team2-pokemon5"></button>
+</body>
+</html>
