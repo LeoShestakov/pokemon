@@ -21,7 +21,7 @@ var winner;
 var turn_log;
 function startGame() {
     myGameArea.start();
-    gameConsole = new component(500, 150, "black", 0, 350);
+    // gameConsole = new component(500, 150, "black", 0, 350); -->
     team1 = new team(1);
     team2 = new team(2);
     team1.addTeam(data['team1']);
@@ -36,7 +36,7 @@ var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
         this.canvas.width = 500;
-        this.canvas.height = 500;
+        this.canvas.height = 350;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 20);
@@ -51,6 +51,7 @@ function pokemon(data) {
     this.stats = data['stats'];
     this.health = this.stats['hp'];
     this.alive = this.health > 0;
+    this.images = data['sprites'];
     this.damage = function(damage){
         if(damage < this.health) {
             this.health -= damage;
@@ -75,7 +76,7 @@ function team(id) {
         for(i = 0; i < data.length; i++) {
             var poke = new pokemon(data[i]);
             this.team.push(poke);
-            console.log(this.team);
+            console.log(data[i]);
         }
     };
     this.resetMove = function() {
@@ -111,31 +112,40 @@ function teamAlive(team) {
     return false;
 }
 
-function teamReady(teamNumber) {
+function teamReady(teamNumber, move) {
     var element = document.getElementById("attack" + teamNumber);
+    var element2 = document.getElementById("sp-attack" + teamNumber);
     element.style.display = "none";
+    element2.style.display = "none";
+    var team;
     if(teamNumber == 1) {
-        team1.move = 'attack';
+        team = team1;
     }
     else {
-        team2.move = 'attack';
+        team = team2;
     }
+    team.move = move;
 }
 
 function resetControls(num) {
-    var elem
+    var elem;
+    var elem2;
     if(num == 1) {
         elem = document.getElementById("attack1");
+        elem2 = document.getElementById("sp-attack1");
         team1.resetMove();
     }
     else {
         elem = document.getElementById("attack2");
+        elem2 = document.getElementById("sp-attack2");
         team2.resetMove();
     }
     elem.style.display = "block";
+    elem2.style.display = "block";
 }
 
 function resetBattle() {
+    log_showcase();
     if(!team1.forceSwap) {
         resetControls(1);
     }
@@ -152,7 +162,8 @@ function resetBattle() {
 
 function endGame(winner) {
     active = false;
-    printText(winner + " is Victorious!!!!");
+    turn_log.push(winner + " is Victorious!!!!");
+    log_showcase();
 }
 
 function gameLogic() {
@@ -169,6 +180,10 @@ function executeMove(team1, team2) {
     if (team1.move.localeCompare('attack') == 0) {
         console.log("Does Attack!");
         attack(team1.team[team1.indexPlay], team2.team[team2.indexPlay]);
+    }
+    else if (team1.move.localeCompare('sp-attack') == 0) {
+        console.log("Does SP-Attack!");
+        sp_attack(team1.team[team1.indexPlay], team2.team[team2.indexPlay]);
     }
 }
 
@@ -230,13 +245,27 @@ function sleep(ms) {
 }
 
 function attack(attacker, target) {
-    var damage = 42 * (attacker.stats['attack'] / target.stats['defense']) * 80;
+    var damage = 42 * (attacker.stats['attack'] / target.stats['defense']);
+    damage = damage * (Math.floor(Math.random(0,9) * 10 + 30));
     damage = Math.floor((damage / 50) + 2);
     console.log("Damage: " + damage);
     target.damage(damage);
     console.log("Target: " + target.health);
-    turn_log.push(attacker.name + " just attacked " + target.name + " dealing " + damage + " damage!");
-    console.log(attacker.name + " just attacked " + target.name + "!");
+    turn_log.push(attacker.name + " attacked " + target.name + " dealing " + damage + " damage!");
+    console.log(turn_log);
+    console.log(attacker.name + " attacked " + target.name + "!");
+}
+
+function sp_attack(attacker, target) {
+    var damage = 42 * (attacker.stats['special-attack'] / target.stats['special-defense']);
+    damage = damage * (Math.floor(Math.random(0,9) * 10 + 30));
+    damage = Math.floor((damage / 50) + 2);
+    console.log("Damage: " + damage);
+    target.damage(damage);
+    console.log("Target: " + target.health);
+    turn_log.push(attacker.name + " special attacked " + target.name + " dealing " + damage + " damage!");
+    console.log(turn_log);
+    console.log(attacker.name + " special attacked " + target.name + "!");
 }
 
 function swapControlInit() {
@@ -336,13 +365,13 @@ function printText(message, y) {
 }
 
 async function log_showcase() {
-    var y = 400;
+    var element = document.getElementById("console");
+    var console_string = "";
     for(i = 0; i < turn_log.length; i++) {
-        printText(turn_log[i], y);
-        y = y + 30;
-        await sleep(3000);
+        console_string = console_string + "<br>" + turn_log[i];
     }
     turn_log = [];
+    element.innerHTML = console_string;
 }
 
 function background() {
@@ -352,18 +381,42 @@ function background() {
     ctx.drawImage(image, 0, 0, 500, 400)
 }
 
+function show() {
+    image = new Image();
+    image.src = team1.team[team1.indexPlay]['images']['back'];
+    ctx = myGameArea.context;
+    ctx.drawImage(image, 50, 200, 200, 200);
+}
+
+function show2() {
+    image = new Image();
+    image.src = team2.team[team2.indexPlay]['images']['front'];
+    ctx = myGameArea.context;
+    ctx.drawImage(image, 250, 100, 200, 200);
+}
+
 function updateGameArea() {
     myGameArea.clear();
     background();
-    gameConsole.update();
-    log_showcase();
+    show();
+    show2();
+    // gameConsole.update();
+    // log_showcase();
     gameLogic();
 }
 
 </script>
-
-<button id="attack1" onclick="teamReady(1)">Attack1</button>
-<button id="attack2" onclick="teamReady(2)">Attack2</button>
+<div class = "card" style = "width: 500px; height: 150px; background-color: black; margin-top: -2em;">
+    <br> <br>
+    <div class="card-body">
+        <h3 style = "color: white" id = "console"> </h3>
+    </div>
+</div>
+<br>
+<button id="attack1" onclick="teamReady(1, 'attack')">Attack1</button>
+<button id="attack2" onclick="teamReady(2, 'attack')">Attack2</button>
+<button id="sp-attack1" onclick="teamReady(1, 'sp-attack')">SP-Attack1</button>
+<button id="sp-attack2" onclick="teamReady(2, 'sp-attack')">SP-Attack2</button>
 <button id="team1-pokemon0"></button>
 <button id="team1-pokemon1"></button>
 <button id="team1-pokemon2"></button>
