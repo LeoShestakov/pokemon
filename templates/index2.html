@@ -3,19 +3,29 @@
 
 {% block content %}
 <div style="background-color:#e84a44">
+    <form method = "POST" action="{{url_for('results')}}">
+    <div class = "d-flex justify-content-center" style="background-color:#e84a44">
+        <button type="submit" class="btn btn-primary" style = "margin-top:10vh"
+        onclick = "if (document.querySelectorAll('input:checked').length < 6) {
+                    alert('You must pick more Pokemon!');
+                    return false;}"
+        >Submit</button>
+    </div>
     <div class="container d-flex justify-content-center" style="background-image:url('static/images/rotom-background.png'); background-repeat:no-repeat; background-size: 100%;">
-        <ul class="overflow-auto" style="height:50vh; margin-top:40vh; margin-left:30vw">
+        <div class="overflow-auto row" style="height:50vh; margin-top:40vh; margin-left:10vw margin-right:10vw">
             {% for pokemon in data %}
-                <li class="list-group-item" style="background-color:rgba(255, 255, 255, 0); border:#FFFFFF">
+                <div class = "col-3">
                     <input type="checkbox" name={{pokemon}} 
                     onclick="if(document.querySelectorAll('input:checked').length > 6) {
-                            this.checked = false;
-                            alert('You Can Only Pick 6 Pokemon Max! Don\'t Be Greedy!');
-                        }">
-                    <label for="{{pokemon}}">{{pokemon.capitalize()}}</label>
-                </li>
+                        this.checked = false;
+                        alert('You Can Only Pick 6 Pokemon Max! Don\'t Be Greedy!');
+                    }">
+                    <label for={{pokemon}}>{{pokemon.capitalize()}}</label><br>
+                </div>
             {% endfor %}
-        </ul>
+            
+        </div>
     </div>
+    </form>
 </div>
 {% endblock content%}
