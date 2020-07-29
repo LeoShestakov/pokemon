@@ -2,10 +2,7 @@
 {% block title %}Home{% endblock title%}
 
 {% block content %}
-<div class = "container">
-    <button type="button" class = "btn-danger" onclick="window.location.href='{{ url_for('addTeam') }}';">Go Back</button>
-</div>
-<div class = "container">
+<div class="container">
     <div class = "row">
     {% for pokemon in data.get_names() %}
         <div class = "col-4">

@@ -19,7 +19,11 @@
             </select>
             </div>
         {% endfor %}
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class = "container">
+            <br>
+            <button type="submit" class="btn-primary">Go to Battle</button>
+            <button type="button" class = "btn-danger" onclick="window.location.href='{{ url_for('viewTeam') }}';">Go Back</button>
+        </div>
         </form>
     </div>
 </div>

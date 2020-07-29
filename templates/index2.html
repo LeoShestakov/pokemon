@@ -2,12 +2,16 @@
 {% block title %}Home{% endblock title%}
 
 {% block content %}
-<div style="background-color:#e84a44">
+<div style = "background-color:#e84a44">
+    <br>
+    <h1 class = "d-flex justify-content-center"> Pokémon Team Builder </h1>
+    <h3 class = "d-flex justify-content-center text-light"> Use CTRL + F to Search </h3>
+    <h5 class = "d-flex justify-content-center"> [Submit for Type Analysis] </h5>
     <form method = "POST" action="{{url_for('results')}}">
     <div class = "d-flex justify-content-center" style="background-color:#e84a44">
         <button type="submit" class="btn btn-primary" style = "margin-top:10vh"
         onclick = "if (document.querySelectorAll('input:checked').length < 6) {
-                    alert('You must pick more Pokemon!');
+                    alert('You MUST pick 6 Pokémon!');
                     return false;}"
         >Submit</button>
     </div>
@@ -18,7 +22,7 @@
                     <input type="checkbox" name={{pokemon}} 
                     onclick="if(document.querySelectorAll('input:checked').length > 6) {
                         this.checked = false;
-                        alert('You Can Only Pick 6 Pokemon Max! Don\'t Be Greedy!');
+                        alert('You Can Only Pick 6 Pokémon Max! Don\'t Be Greedy!');
                     }">
                     <label for={{pokemon}}>{{pokemon.capitalize()}}</label><br>
                 </div>

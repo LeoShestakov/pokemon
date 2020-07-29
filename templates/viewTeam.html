@@ -1,9 +1,5 @@
 {% extends "base.html"%}
 {% block content%}
-<div class = "container">
-    <button type="button" class = "btn-danger" onclick="window.location.href='{{ url_for('index') }}';">Go Back</button>
-    <br> <br>
-</div>
 <div class="container">
   <div class="row">
     {% for team in data %}
@@ -25,7 +21,6 @@
   </div>
 </div>
 <div class = "container">
-    <br>
     <button type="button" class = "btn-primary" onclick="window.location.href='{{ url_for('teamSelect') }}';">Team Selector</button>
 </div>
 {% endblock %}
