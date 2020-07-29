@@ -5,8 +5,8 @@
 <div class="container">
   <div class="row">
     {% for team in data %}
-    <div class="col-lg-3 col-md-4 col-sm-6">
-      <div class="card">
+    <div class="col-lg-3 col-md-4 col-sm-3">
+      <div class="card" style="height: 15rem">
         <div class="card-body">
           <h5 class="card-title">{{team['name']}}</h5>
             <ul>
@@ -22,8 +22,7 @@
   </div>
 </div>
 <br>
-<div class = "container">
-    <button type="button" class = "btn-primary" onclick="window.location.href='{{ url_for('teamSelect') }}';">Team Selector</button>
-</div>
+<br>
+<br>
 </div>
 {% endblock %}
