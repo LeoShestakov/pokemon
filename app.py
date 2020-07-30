@@ -38,7 +38,7 @@ mongo = PyMongo(app)
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index2.html', data=api.get_pokemon_list())
+    return render_template('index4.html', data=api.get_pokemon_list())
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
@@ -67,7 +67,7 @@ def addTeam():
 
 @app.route('/viewTeams')
 def viewTeam():
-    data = list(mongo.db.teams.find({}))
+    data = list(mongo.db.teams.find({}))[::-1]
     return render_template('viewTeam.html', data=data)
 
 @app.route('/teamDetails/<id>')

@@ -1,12 +1,15 @@
 {% extends "base.html"%}
+{% block title %}Team Viewer{% endblock title %}
 {% block content%}
 <div style = "background-color: #e84b43">
 <br>
 <div class="container">
+<h3 class="text-light d-flex justify-content-center"> PokeTeams </h3>
+<br>
   <div class="row">
     {% for team in data %}
-    <div class="col-lg-3 col-md-4 col-sm-3">
-      <div class="card" style="height: 15rem">
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="card" style="height: 15rem; margin-bottom: 1rem;">
         <div class="card-body">
           <h5 class="card-title">{{team['name']}}</h5>
             <ul>
