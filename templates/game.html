@@ -66,6 +66,9 @@ function pokemon(data) {
     this.isAlive = function(){
         return this.alive;
     };
+    this.heal = function(amount) {
+        this.health = this.health + amount;
+    };
 }
 
 function team(id) {
@@ -74,6 +77,7 @@ function team(id) {
     this.move = "";
     this.id = id;
     this.forceSwap = false;
+    this.potion = 3;
     this.addTeam = function(data){
         for(i = 0; i < data.length; i++) {
             var poke = new pokemon(data[i]);
@@ -103,6 +107,15 @@ function team(id) {
     this.swap = function() {
         this.forceSwap = !this.forceSwap;
     }
+    this.countPotion = function() {
+        if(this.potion > 0) {
+            this.potion = this.potion - 1;
+        }
+        else {
+            var elem = document.getElementById('potion' + this.id);
+            elem.disabled = true;
+        }
+    }
 }
 
 function teamAlive(team) {
@@ -117,8 +130,12 @@ function teamAlive(team) {
 function teamReady(teamNumber, move) {
     var element = document.getElementById("attack" + teamNumber);
     var element2 = document.getElementById("sp-attack" + teamNumber);
+    var element3 = document.getElementById("potion" + teamNumber);
+    var element4 = document.getElementById("swap" + teamNumber);
     element.style.display = "none";
     element2.style.display = "none";
+    element3.style.display = "none";
+    element4.style.display = "none";
     var team;
     if(teamNumber == 1) {
         team = team1;
@@ -132,18 +149,26 @@ function teamReady(teamNumber, move) {
 function resetControls(num) {
     var elem;
     var elem2;
+    var elem3;
+    var elem4;
     if(num == 1) {
         elem = document.getElementById("attack1");
         elem2 = document.getElementById("sp-attack1");
+        elem3 = document.getElementById("potion1");
+        elem4 = document.getElementById("swap1");
         team1.resetMove();
     }
     else {
         elem = document.getElementById("attack2");
         elem2 = document.getElementById("sp-attack2");
+        elem3 = document.getElementById("potion2");
+        elem4 = document.getElementById("swap2");
         team2.resetMove();
     }
     elem.style.display = "block";
     elem2.style.display = "block";
+    elem3.style.display = "block";
+    elem4.style.display = "block";
 }
 
 function resetBattle() {
@@ -274,6 +299,108 @@ function sp_attack(attacker, target) {
     console.log(attacker.name + " special attacked " + target.name + "!");
 }
 
+function potion(teamNum) {
+    var element = document.getElementById("attack" + teamNum);
+    var element2 = document.getElementById("sp-attack" + teamNum);
+    var element3 = document.getElementById("potion" + teamNum);
+    var element4 = document.getElementById("swap" + teamNum);
+    element.style.display = "none";
+    element2.style.display = "none";
+    element3.style.display = "none";
+    element4.style.display = "none";
+    var team;
+    if(teamNum == 1) {
+        team = team1;
+    }
+    else {
+        team = team2;
+    }
+    team.countPotion();
+    team.move = "potion";
+    var poke = team.team[team.indexPlay]
+    if(poke.stats['hp'] > poke.health + 60) {
+        poke.heal(poke.stats['hp'] - poke.health);
+    }
+    else {
+        poke.heal(60);
+    }
+}
+
+function showSwap(teamNum) {
+    var element = document.getElementById("attack" + teamNum);
+    element.style.display = "none";
+    element = document.getElementById("sp-attack" + teamNum);
+    element.style.display = "none";
+    element = document.getElementById("potion" + teamNum);
+    element.style.display = "none";
+    element = document.getElementById("swap" + teamNum);
+    element.style.display = "none";
+
+    var team;
+    if(teamNum == 1) {
+        team = team1;
+    }
+    else {
+        team = team2;
+    }
+    for(i = 0; i < team.team.length; i++) {
+        var elem = document.getElementById('team' + teamNum + '-pokemon' + i);
+        elem.setAttribute("onclick", "swap("+ teamNum + ", " + i + ")");
+        elem.style.display = "block";
+    }
+
+    var elem = document.getElementById('team' + teamNum + '-back');
+    elem.style.display = 'block';
+}
+
+function swapBack(teamNum) {
+    var team;
+    if(teamNum == 1) {
+        team = team1;
+    }
+    else {
+        team = team2;
+    }
+    for(i = 0; i < team.team.length; i++) {
+        var elem = document.getElementById('team' + teamNum + '-pokemon' + i);
+        elem.setAttribute("onclick", "swapForcedSelected(" + teamNum + ", " + i + ")");
+        elem.style.display = "none";
+    }
+
+    var elem = document.getElementById('team' + teamNum + '-back');
+    elem.style.display = 'none';
+
+    var element = document.getElementById("attack" + teamNum);
+    element.style.display = "block";
+    element = document.getElementById("sp-attack" + teamNum);
+    element.style.display = "block";
+    element = document.getElementById("potion" + teamNum);
+    element.style.display = "block";
+    element = document.getElementById("swap" + teamNum);
+    element.style.display = "block";
+}
+
+function swap(teamNum, num) {
+    var team;
+    if(teamNum == 1) {
+        team = team1;
+    }
+    else {
+        team = team2;
+    }
+    for(i = 0; i < team.team.length; i++) {
+        var elem = document.getElementById('team' + teamNum + '-pokemon' + i);
+        elem.setAttribute("onclick", "swapForcedSelected(" + teamNum + ", " + i + ")");
+        elem.style.display = "none";
+    }
+
+    var elem = document.getElementById('team' + teamNum + '-back');
+    elem.style.display = 'none';
+
+    team.move = "swap";
+    team.setIndex(num);
+}
+
 function swapControlInit() {
     for(i = 0; i < team1.team.length; i++) {
         var elem = document.getElementById('team1-pokemon' + i);
@@ -286,6 +413,10 @@ function swapControlInit() {
         elem.innerHTML = team2.team[i].name;
         elem.setAttribute("onclick", "swapForcedSelected(2, " + i + ")");
         elem.style.display = "none";
+    }
+    for(i = 0; i < 2; i++) {
+        var elem = document.getElementById('team' + (i + 1) + '-back');
+        elem.style.display = 'none';
     }
 }
 
@@ -440,8 +571,14 @@ function get_multiplier(attacker, target) {
 <br>
 <button id="attack1" onclick="teamReady(1, 'attack')">Attack1</button>
 <button id="sp-attack1" onclick="teamReady(1, 'sp-attack')">SP-Attack1</button>
+<button id="potion1" onClick="potion(1)">Potion1</button>
+<button id="swap1" onClick="showSwap(1)">Swap-1</button>
+<button id="team1-back" onclick="swapBack(1)">Back-1</button>
 <button id="attack2" onclick="teamReady(2, 'attack')">Attack2</button>
 <button id="sp-attack2" onclick="teamReady(2, 'sp-attack')">SP-Attack2</button>
+<button id="potion2" onClick="potion(2)">Potion2</button>
+<button id="swap2" onClick="showSwap(2)">Swap-2</button>
+<button id="team2-back" onclick="swapBack(2)">Back-2</button>
 <button id="team1-pokemon0"></button>
 <button id="team1-pokemon1"></button>
 <button id="team1-pokemon2"></button>
