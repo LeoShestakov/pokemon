@@ -278,7 +278,6 @@ function executeMove(team1, team2) {
         console.log("Does SP-Attack!");
         sp_attack(team1.team[team1.indexPlay], team2.team[team2.indexPlay]);
     }
-    health();
 }
 
 function battle(team1, team2) {
@@ -350,6 +349,7 @@ function attack(attacker, target) {
     turn_log.push(attacker.name + " attacked " + target.name + " dealing " + damage + " damage!");
     console.log(turn_log);
     console.log(attacker.name + " attacked " + target.name + "!");
+    health();
 }
 
 function sp_attack(attacker, target) {
@@ -364,6 +364,7 @@ function sp_attack(attacker, target) {
     turn_log.push(attacker.name + " special attacked " + target.name + " dealing " + damage + " damage!");
     console.log(turn_log);
     console.log(attacker.name + " special attacked " + target.name + "!");
+    health();
 }
 
 function potion(teamNum) {
@@ -391,6 +392,7 @@ function potion(teamNum) {
     else {
         poke.heal(60);
     }
+    health();
 }
 
 function showSwap(teamNum) {
@@ -466,6 +468,7 @@ function swap(teamNum, num) {
 
     team.move = "swap";
     team.setIndex(num);
+    health();
 }
 
 function swapControlInit() {
@@ -485,6 +488,7 @@ function swapControlInit() {
         var elem = document.getElementById('team' + (i + 1) + '-back');
         elem.style.display = 'none';
     }
+    health();
 }
 
 function swapForced(team) {
@@ -588,9 +592,9 @@ function health() {
     var elem1 = document.getElementById("health1");
     var elem2 = document.getElementById("health2");
     elem1.setAttribute("aria-valuenow", health1);
-    elem1.setAttribute("width", health1 + "%");
+    elem1.setAttribute("style", 'width: ' + health1 + "%");
     elem2.setAttribute("aria-valuenow", health2);
-    elem2.setAttribute("width", health2 + "%");
+    elem2.setAttribute("style", 'width: ' + health2 + "%");
 }
 
 function background() {
