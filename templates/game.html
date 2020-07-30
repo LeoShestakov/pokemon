@@ -99,6 +99,8 @@ function startGame() {
     winner = "";
     swapControlInit();
     turn_log = [];
+    var sound = new music('static/images/battle_music.mp3');
+    sound.play();
 }
 
 var myGameArea = {
@@ -643,6 +645,23 @@ function get_multiplier(attacker, target) {
     }
     console.log("ATK MULTIPLIER: " + multiplier);
     return multiplier;
+}
+
+function music(src) {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.volume = 0.2;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  this.sound.loop = true;
+  document.body.appendChild(this.sound);
+  this.play = function(){
+    this.sound.play();
+  }
+  this.stop = function(){
+    this.sound.pause();
+  }
 }
 
 </script>
