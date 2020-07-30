@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock title%}
+
+{% block content %}
+<div style = "background-color: #e84b43">
+    <br>
+    <h1 class = "d-flex justify-content-center"> Pokémon Team Builder </h1>
+    <h3 class = "d-flex justify-content-center text-light"> Use CTRL + F to Search </h3>
+    <h5 class = "d-flex justify-content-center"> [Submit for Type Analysis] </h5>
+    <form method = "POST" action="{{url_for('results')}}">
+    <div class = "d-flex justify-content-center" style="background-color:#e84a44">
+        <button type="submit" class="btn btn-primary" style = "margin-top:10vh"
+        onclick = "if (document.querySelectorAll('input:checked').length < 6) {
+                    alert('You MUST pick 6 Pokémon!');
+                    return false;}"
+        >Submit</button>
+    </div>
+    <div class="container d-flex justify-content-center" style="background-image:url('static/images/rotom-background.png'); background-repeat:no-repeat; background-size: 100%; height: 100vh"">
+        <div class="overflow-auto row" style="height:50vh; margin-top:40vh; margin-left:10vw margin-right:10vw">
+            <select class="mdb-select md-form" searchable="Search here..">
+                {% for pokemon in data %}
+                    <option value={{pokemon}}>{{pokemon.capitalize()}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    </form>
+<br>
+</div>
+
+<script type=text/javascript>
+$(document).ready(function() {
+    $('.mdb-select').materialSelect();
+});
+</script>
+{% endblock content%}
