@@ -102,7 +102,12 @@ function startGame() {
     turn_log = [];
     var sound = new music('static/images/battle_music.mp3');
     sound.play();
-    botLogic();
+    if(data['bot'] == 1) {
+        bot = true;
+    }
+    if(bot) {
+        botLogic();
+    }
 }
 
 var myGameArea = {
@@ -230,7 +235,9 @@ function botLogic() {
             elem.click();
         }
         else {
-            botLogic();
+            if(bot) {
+                botLogic();
+            }
         }
     }
 }
@@ -314,7 +321,9 @@ function resetBattle() {
     }
     if(!team2.forceSwap) {
         resetControls(2);
-        botLogic();
+        if(bot) {
+            botLogic();
+        }
     }
     else {
         showForcedSwap(2);
@@ -586,8 +595,10 @@ function showForcedSwap(teamNum) {
         elem.style.display = "block";
     }
     if(team.id == 2) {
-        botForcedLogic();
-        botLogic();
+        if(bot) {
+            botForcedLogic();
+            botLogic();
+        }
     }
 }
 
