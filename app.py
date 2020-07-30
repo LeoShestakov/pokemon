@@ -38,7 +38,7 @@ mongo = PyMongo(app)
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index3.html', data=api.get_pokemon_list())
+    return render_template('index2.html', data=api.get_pokemon_list())
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
