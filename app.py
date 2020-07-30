@@ -91,11 +91,14 @@ def game():
         return redirect('teamSelect')
     else:
         data = dict(request.form)
+        bot_bool = 0
+        if 'bot' in data.keys():
+            bot_bool = 1
         t1 = mongo.db.teams.find_one({'_id': ObjectId(data['team1'])})['team']
         t2 = mongo.db.teams.find_one({'_id': ObjectId(data['team2'])})['team']
         team1 = team.Team()
         team2 = team.Team()
         team1.add_pokemon(t1)
         team2.add_pokemon(t2)
-        teams = {'team1': team1.get_team(), 'team2': team2.get_team(), 'typing': team1.get_array()}
+        teams = {'team1': team1.get_team(), 'team2': team2.get_team(), 'typing': team1.get_array(), 'bot': bot_bool}
         return render_template('game.html', data=teams)

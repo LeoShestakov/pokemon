@@ -73,6 +73,7 @@ canvas {
     </div>
 </div>
 </div>
+
 <div class="progress">
   <div class="progress-bar" id="health1" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
@@ -104,6 +105,9 @@ function startGame() {
     sound.play();
     if(data['bot'] == 1) {
         bot = true;
+    }
+    else {
+        bot = false;
     }
     if(bot) {
         botLogic();
