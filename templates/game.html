@@ -210,6 +210,13 @@ function botLogic() {
     task = Math.floor(task);
     var pokeHealth = Math.floor((team2.team[team2.indexPlay].health / team2.team[team2.indexPlay]['hp']) * 100);
     var potionsLeft = team2.potion;
+    bot_multiplier = get_multiplier(team2.team[team2.indexPlay], team1.team[team1.indexPlay]);
+    if (bot_multiplier >= 2) {
+        task = Math.floor(Math.random() * 8);
+    }
+    else if (bot_multiplier < 1) {
+        task = 9;
+    }
     if(pokeHealth < 30 && potionsLeft > 0) {
         var rand = Math.floor(Math.random() * 10);
         if(rand > 7) {
