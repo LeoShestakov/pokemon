@@ -215,7 +215,7 @@ function botLogic() {
     if (bot_multiplier >= 2) {
         task = Math.floor(Math.random() * 8);
     }
-    else if (bot_multiplier < 1) {
+    else if (bot_multiplier < 1 && task > 4) {
         task = 9;
     }
     if(pokeHealth < 30 && potionsLeft > 0) {
