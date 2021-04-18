@@ -6,6 +6,8 @@ Using a dropdown menu, any of the teams stored in the database can be called upo
 
 This moveset is not representative of the official games, but effectively, every Pokemon can still choose from 4 different moves during a turn.
 
+App Presentation: https://docs.google.com/presentation/d/1EiZF9in7JBcg7wm7mN3w5uSM-zuki-0lm5urRMcrku8
+
 ![1](https://user-images.githubusercontent.com/47545637/115163087-c5c70a00-a06c-11eb-9390-6653e6c4eb78.png)
 ![2](https://user-images.githubusercontent.com/47545637/115163089-c790cd80-a06c-11eb-80e6-5b48fe81e3c3.png)
 ![3](https://user-images.githubusercontent.com/47545637/115163090-c8c1fa80-a06c-11eb-90d8-fb9273d15a23.png)
